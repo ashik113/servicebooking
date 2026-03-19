@@ -1,6 +1,7 @@
 package com.ashik.servicebooking.controller;
 
 import com.ashik.servicebooking.dto.LoginRequest;
+import com.ashik.servicebooking.dto.LoginResponse;
 import com.ashik.servicebooking.security.JwtUtil;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,14 +10,15 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     @PostMapping("/login")
-    public String login(@RequestBody LoginRequest loginRequest) {
+    public LoginResponse login(@RequestBody LoginRequest loginRequest) {
         if ("ashik".equals(loginRequest.getUserName()) &&
                 "1234".equals(loginRequest.getPassword())) {
 
-            return JwtUtil.generateToken(loginRequest.getUserName());
+        String token = JwtUtil.generateToken(loginRequest.getUserName());
+            return new LoginResponse(token, "Login Success");
         }
 
-        return "Invalid Credentials";
+        return new LoginResponse(null, "Invalid Credentials..");
     }
 
     @GetMapping("/api/test")
